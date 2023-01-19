@@ -1,11 +1,12 @@
 import React from "react";
-import ScrollToTopOnMount from "../ScrollToTop/ScrollToTop";
+import Banner from "../../Component/Banner/Banner";
+import ScrollToTopOnMount from "../../Component/ScrollToTop/ScrollToTop";
 
 const Home = () => {
   return (
     <div>
       <ScrollToTopOnMount></ScrollToTopOnMount>
-      <h1>this is home page</h1>
+      <Banner></Banner>
     </div>
   );
 };
