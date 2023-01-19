@@ -1,8 +1,23 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import ScrollToTopOnMount from "../../ScrollToTop/ScrollToTop";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import Loading from "../../Loading/Loading";
 
 const Products = memo(() => {
+  const [allProducts, setAllProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("https://eco-garden-server.vercel.app/products")
+      .then((res) => res.json())
+      .then((data) => setAllProducts(data));
+  }, []);
+
+  console.log(allProducts);
+
+  if (!allProducts) {
+    return <Loading></Loading>;
+  }
   return (
     <div className="px-5 w-full ">
       <ScrollToTopOnMount></ScrollToTopOnMount>
@@ -15,83 +30,26 @@ const Products = memo(() => {
         </h1>
       </div>
       <div className="flex flex-wrap gap-5 justify-center items-center">
-        {/*  */}
-        <div className="w-full  md:w-[350px] lg:w-[400px] rounded overflow-hidden shadow-xl ">
-          <img
-            className="w-full  "
-            src="https://previews.123rf.com/images/happyalex/happyalex1309/happyalex130900095/22671838-apple-garden.jpg"
-            alt="Mountain"
-          />
-          <div className="p-3">
-            <div className="font-bold text-xl mb-2">Red Delicious Apple</div>
-            <p className="text-gray-700 text-base">
-              Red Delicious is a type of apple with a red exterior and sweet
-              taste that was first recognized in Madison County, Iowa, in 1872.
-              Today, the name Red Delicious comprises more than 50 cultivars.
-              From 1968 to 2018, it was the most produced cultivar in the United
-              States
-            </p>
-            <Link
-              className="w-full py-2 flex justify-center items-center"
-              to="/details"
-            >
-              <button className="px-3 py-1 rounded-full bg-blue-400 hover:bg-blue-700 text-white font-semibold outline-none ">
-                Details
-              </button>
-            </Link>
+        {allProducts?.map((p) => (
+          <div
+            key={p.id}
+            className="w-full  md:w-[350px] lg:w-[400px] rounded overflow-hidden shadow-xl "
+          >
+            <img className="w-full  " src={p.img} alt="Mountain" />
+            <div className="p-3">
+              <div className="font-bold text-xl mb-2">{p.title}</div>
+              <p className="text-gray-700 text-base">{p.description}</p>
+              <Link
+                className="w-full py-2 flex justify-center items-center"
+                to={`/details/${p.id}`}
+              >
+                <button className="px-3 py-1 rounded-full bg-blue-400 hover:bg-blue-700 text-white font-semibold outline-none ">
+                  Details
+                </button>
+              </Link>
+            </div>
           </div>
-        </div>
-        ;{/*  */}
-        {/*  */}
-        <div className="w-full  md:w-[350px] lg:w-[400px] rounded overflow-hidden shadow-xl ">
-          <img
-            className="w-full "
-            src="https://live.staticflickr.com/5549/11721097603_9d171d0298_b.jpg"
-            alt="Mountain"
-          />
-          <div className="p-3">
-            <div className="font-bold text-xl mb-2">Acid-less Orange</div>
-            <p className="text-gray-700 text-base">
-              Lima oranges, botanically classified as Citrus sinensis, are an
-              acidless variety growing on evergreen trees that can reach up to
-              ten meters in height and belongs to the Rutaceae or citrus family.
-            </p>
-            <Link
-              className="w-full py-2 flex justify-center items-center"
-              to="/details"
-            >
-              <button className="px-3 py-1 rounded-full bg-blue-400 hover:bg-blue-700 text-white font-semibold outline-none ">
-                Details
-              </button>
-            </Link>
-          </div>
-        </div>
-        {/*  */}
-        {/*  */}
-        <div className="w-full md:w-[350px] lg:w-[400px] rounded overflow-hidden shadow-xl ">
-          <img
-            className="w-full  "
-            src="https://img.freepik.com/free-photo/grapes-vineyards-plant-sunny-day_1398-5016.jpg?w=2000"
-            alt="Mountain"
-          />
-          <div className="p-3">
-            <div className="font-bold text-xl mb-2">Red grapes</div>
-            <p className="text-gray-700 text-base">
-              Grapes contain powerful antioxidants known as polyphenols. These
-              are thought to have anti-inflammatory and antioxidant properties.
-              One of these is resveratrol.
-            </p>
-            <Link
-              className="w-full py-2 flex justify-center items-center"
-              to="/details"
-            >
-              <button className="px-3 py-1 rounded-full bg-blue-400 hover:bg-blue-700 text-white font-semibold outline-none ">
-                Details
-              </button>
-            </Link>
-          </div>
-        </div>
-        {/*  */}
+        ))}
       </div>
     </div>
   );
